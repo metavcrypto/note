@@ -1,0 +1,66 @@
+import os
+
+class Notebook:
+    def __init__(self, filename="notes.txt"):
+        self.filename = filename
+        self.notes = []
+        self.load_notes()
+
+    def load_notes(self):
+        if os.path.exists(self.filename):
+            with open(self.filename, "r", encoding="utf-8") as file:
+                self.notes = file.readlines()
+
+    def save_notes(self):
+        with open(self.filename, "w", encoding="utf-8") as file:
+            file.writelines(self.notes)
+
+    def add_note(self, note):
+        self.notes.append(note + "\n")
+        self.save_notes()
+
+    def view_notes(self):
+        if not self.notes:
+            print("没有笔记。")
+        else:
+            for i, note in enumerate(self.notes, 1):
+                print(f"{i}. {note.strip()}")
+
+    def delete_note(self, index):
+        if 1 <= index <= len(self.notes):
+            del self.notes[index - 1]
+            self.save_notes()
+            print("笔记已删除。")
+        else:
+            print("无效的笔记索引。")
+
+def main():
+    notebook = Notebook()
+
+    while True:
+        print("\n选择操作:")
+        print("1. 添加笔记")
+        print("2. 查看笔记")
+        print("3. 删除笔记")
+        print("4. 退出")
+
+        choice = input("请输入选项 (1/2/3/4): ")
+
+        if choice == "1":
+            note = input("输入新笔记: ")
+            notebook.add_note(note)
+            print("笔记已添加。")
+        elif choice == "2":
+            notebook.view_notes()
+        elif choice == "3":
+            notebook.view_notes()
+            index = int(input("输入要删除的笔记编号: "))
+            notebook.delete_note(index)
+        elif choice == "4":
+            print("谢谢使用，再见！")
+            break
+        else:
+            print("无效选项，请重试。")
+
+if __name__ == "__main__":
+    main()
